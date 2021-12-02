@@ -182,7 +182,19 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
         } else {
             if let value = characteristic.value , let str = String(data: value, encoding: .utf8) {
                 print("\(str)")
+                localNotification(message: str)
             }
         }
+    }
+    
+    func localNotification(message : String) {
+        let content = UNMutableNotificationContent()
+        content.title = "お知らせ"
+        content.body = message
+        content.sound = UNNotificationSound.default
+
+        // 直ぐに通知を表示
+        let request = UNNotificationRequest(identifier: "immediately", content: content, trigger: nil)
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
     }
 }

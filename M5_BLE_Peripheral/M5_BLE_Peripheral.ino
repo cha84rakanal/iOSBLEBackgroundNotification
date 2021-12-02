@@ -12,6 +12,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include <M5StickC.h>
+
 // See the following for generating UUIDs:
 // https://www.uuidgenerator.net/
 
@@ -29,6 +31,12 @@ class MyServerCallbacks : public BLEServerCallbacks {
 };
 
 void setup() {
+    M5.begin();
+    M5.IMU.Init();
+
+    // タイトル
+    M5.Lcd.fillRect(0, 0, 80, 20, TFT_BLUE);
+  
     Serial.begin(115200);
     Serial.println("Starting BLE work!");
 
@@ -62,16 +70,17 @@ void setup() {
 int i = 0;
 
 void loop() {
-    if (deviceConnected) {
+    if (M5.BtnA.wasPressed() && deviceConnected) {
         // put your main code here, to run repeatedly:
         uint8_t buf[16];
-        String s = "Hello !" + String(i) + "\n";
+        String s = "Hello! " + String(i) + "\n";
         s.getBytes(buf, 16);
         pBleNotifyCharacteristic->setValue(buf, 16);
         pBleNotifyCharacteristic->notify();
         i++;
     }
 
-    // 100ミリ秒停止します
-    delay(100);
+    // 33ミリ秒停止します
+    delay(33);
+    M5.update();
 }
