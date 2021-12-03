@@ -11,6 +11,8 @@ import UIKit
 
 class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate {
     
+    @IBOutlet weak var statusLabel: UILabel!
+    
     /// 接続先ローカルネーム
     private let connectToLocalName:String = "M5Peripheral"
     /// 接続先Peripheral情報
@@ -88,6 +90,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     ///   - peripheral: CBPeripheral
     func centralManager(_: CBCentralManager, didConnect peripheral: CBPeripheral) {
         print("接続成功")
+        statusLabel.text = "Connected"
         self.connectToPeripheral = peripheral
         self.connectToPeripheral?.delegate = self
         // 指定のサービスを探索
@@ -116,6 +119,7 @@ class ViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDe
     ///   - error: Error
     func centralManager(_: CBCentralManager, didDisconnectPeripheral _: CBPeripheral, error: Error?) {
         print("接続切断：\(String(describing: error))")
+        statusLabel.text = "Not Connected"
     }
     
     /// サービス検索結果の取得
